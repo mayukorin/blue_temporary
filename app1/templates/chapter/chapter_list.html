@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    <table class="table table-striped">
+        <tbody>
+            {% for chapter in chapters %}
+                <tr>
+                    <td>{{chapter.subject.name}} 第{{chapter.number}}章 {{ chapter.name }}</td>
+                    <td>詳細を見る</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table><br>
+     <!--
+     <table class="table table-striped">
+        <tbody>
+            {% for n in names %}
+                {{n}}
+            {% endfor %}
+
+        </tbody>
+    </table>]
+    -->
+    
+{% endblock %}  
+    

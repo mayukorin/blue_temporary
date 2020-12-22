@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+   
+
+    <br>
+    <form method="post" action="{% url 'app1:siteUser_register' %}">
+          
+     {% if form.non_field_errors %}
+     <ul>
+         {% for non_field_error in form.non_field_errors %}
+         <li>{{non_field_error}</li>
+         {% endfor %}
+     </ul>
+     {% endif %}
+      {% for item in form %}
+          {% if forloop.counter0 != 2 %}
+              <div class="form-group">
+                  <input 
+                      type="{{item.field.widget.input_type}}"
+                      class="form-control {% if item.errors %} is-invalid {% endif %}"
+                      name="{{item.name}}"
+                 >
+                  
+                   {% if item.errors %}
+                       <div class="invalid-feedback">
+                           {{item.errors.0}}
+                       </div>
+                   {% endif %}
+              </div>
+          {% else %}
+              <div class="form-group form-check">
+                  {{item}}
+                  <label class="fom-check-label">先生としてログインする</label>
+                  
+              </div>
+          {% endif %}
+      
+       {% endfor %}
+        {% csrf_token %}
+       
+        <br>
+       　<button type="submit" class="btn btn-primary mb-2">ユーザー登録</button>
+    
+    </form>
+{% endblock %}
