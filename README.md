@@ -54,7 +54,7 @@ DATABASES = {
 
 # Usage
 
-```python manage.py runserver```でhttp://127.0.0.1:8000/siteUser/registerにアクセス  
+```python manage.py runserver```でhttp://127.0.0.1:8000/siteUser/register にアクセス  
 
 
 
