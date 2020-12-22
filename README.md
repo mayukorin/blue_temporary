@@ -49,7 +49,6 @@ DATABASES = {
 ```python manage.py migrate``` 
 を実行  
 
-1. ```python manage.py runserver```でhttp://127.0.0.1:8000/siteUser/registerにアクセス  
 
 
 
