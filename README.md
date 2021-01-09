@@ -46,9 +46,9 @@ DATABASES = {
 }
 ```
 1. test7ディレクトリで、     
-```python manage.py makemigrations```
-```python manage.py migrate app1```
-```python manage.py migrate``` 
+```python manage.py makemigrations```  
+```python manage.py migrate app1```  
+```python manage.py migrate```  
 を実行  
 
 
