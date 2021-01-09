@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><a href = "{% url 'app1:chapter_list' %}">Home</a> > <a href="{% url 'app1:section_list' problem.problem_group.section.chapter.id %}">{{problem.problem_group.section.chapter.subject.name}} 第{{problem.problem_group.section.chapter.number}}章 {{ problem.problem_group.section.chapter.name }}</a> > <a href="{% url 'app1:problem_group_list' problem.problem_group.section.id %}"> §{{problem.problem_group.section.number}} {{problem.problem_group.section.name}}</a> > <a href="{% url 'app1:problem_list' problem.problem_group.id %}">{{problem.problem_group.name}}{{problem_group.name}}（{{problem.problem_group.problems.all|length}}題）</a> > {{problem.name}}</p>
+    <h2>{{problem.name}}の詳細ページ</h2><br>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>範囲</td>
+                <td>{{problem.problem_group.section.chapter.subject.name}} §{{problem.problem_group.section.number}} {{problem.problem_group.section.name}}</td>
+            </tr>
+            <tr>
+                <td>問題名</td>
+                <td>{{problem.name}}</td>
+            </tr>
+            <tr>
+                <td>詳細</td>
+                <td>{{problem.problem_group.title}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="index">類似問題</p>
+    {% if problem.from_problem.all|length != 0 or problem.to_problem.all|length != 0 %}
+        {% for similar in problem.from_problem.all %}
+            
+            {% if similar.to_problem.problem_group.number == null %}
+                <a href="{% url 'app1:problem_show' similar.to_problem.id %}">{{similar.to_problem.problem_group.section.chapter.subject.name}} §{{similar.to_problem.problem_group.section.number}} {{similar.to_problem.name}}</a>&nbsp;
+            {% else %}
+                <a href="{% url 'app1:problem_show' similar.to_problem.id %}">{{similar.to_problem.name}}</a>&nbsp;
+            {% endif %}
+        {% endfor %}
+        {% for similar in problem.to_problem.all %}
+            {% if similar.from_problem.problem_group.number == null %}
+                <a href="{% url 'app1:problem_show' similar.from_problem.id %}">{{similar.from_problem.problem_group.section.chapter.subject.name}} §{{similar.from_problem.problem_group.section.number}} {{similar.from_problem.name}}</a>&nbsp;
+            {% else %}
+                <a href="{% url 'app1:problem_show' similar.from_problem.id %}">{{similar.from_problem.name}}</a>&nbsp;
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        なし
+    {% endif %}
+    <p class="index">基礎問題</p>
+    {% if problem.difficult.all|length != 0 %}
+        {% for develop in problem.difficult.all %}
+            {% if develop.from_problem.problem_group.number == null %}
+                <a href="{% url 'app1:problem_show' develop.from_problem.id %}">{{develop.from_problem.problem_group.section.chapter.subject.name}} §{{develop.from_problem.problem_group.section.number}} {{develop.from_problem.name}}</a>&nbsp;
+            {% else %}
+                <a href="{% url 'app1:problem_show' develop.from_problem.id %}">{{develop.from_problem.name}}</a>&nbsp;
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        なし
+    {% endif %}
+    <p class="index">発展問題</p>
+    {% if problem.easy.all|length != 0 %}
+        {% for develop in problem.easy.all %}
+            {% if develop.to_problem.problem_group.number == null %}
+                <a href="{% url 'app1:problem_show' develop.to_problem.id %}">{{develop.to_problem.problem_group.section.chapter.subject.name}} §{{develop.to_problem.problem_group.section.number}} {{develop.to_problem.name}}</a>&nbsp;
+            {% else %}
+                <a href="{% url 'app1:problem_show' develop.to_problem.id %}">{{develop.to_problem.name}}</a>&nbsp;
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        なし
+    {% endif %}
+    
+    <p><a href="{% url 'app1:answer_list' problem.id %}">勉強記録一覧を見る</a></p>
+    
+{% endblock %}

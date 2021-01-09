@@ -11,3 +11,79 @@
     margin-top:10px;
 }
 
+.index {
+    font-weight:bold;
+}
+
+.maru {
+    color:green;
+}
+.content {
+    
+    margin:auto;
+    
+    
+}
+
+.comment_for_photo {
+
+    display:none;
+}
+.image_and_explain {
+    display: flex;
+    justify-content: space-between;
+}
+.image {
+    width:50%;
+   
+}
+
+.explain {
+    width:40%;
+}
+img {
+    width:100%;
+}
+.comment {
+   
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 5px;
+    padding:5px;
+}
+.do {
+    display: flex;
+    justify-content: space-between;
+}
+.add_reply_comment {
+
+    padding:5px;
+    float:left;
+}
+
+.download {
+    float:right;
+    padding:5px;
+}
+
+.comment_detail {
+    color:#808080;
+    padding-bottom:3px;
+}
+
+.username {
+    color:black;
+    font-weight:bold;
+}
+
+.fas fa-times {
+    color:red;
+}
+
+
+
+.answer_show:link { color:black; text-decoration:none }
+.answer_show:visited { color:black; text-decoration:none }
+.answer_show:hover { color:black; text-decoration:none }
+.answer_show:active { color:black; text-decoration:none }
+
+

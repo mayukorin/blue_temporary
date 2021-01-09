@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><a href = "{% url 'app1:chapter_list' %}">Home</a> > <a href="{% url 'app1:section_list' problem.problem_group.section.chapter.id %}">{{problem.problem_group.section.chapter.subject.name}} 第{{problem.problem_group.section.chapter.number}}章 {{ problem.problem_group.section.chapter.name }}</a> > <a href="{% url 'app1:problem_group_list' problem.problem_group.section.id %}"> §{{problem.problem_group.section.number}} {{problem.problem_group.section.name}}</a> > <a href="{% url 'app1:problem_list' problem.problem_group.id %}">{{problem.problem_group.name}}{{problem_group.name}}（{{problem.problem_group.problems.all|length}}題）</a> > <a href="{% url 'app1:problem_show' problem.id %}">{{problem.name}}</a> > <a href="{% url 'app1:answer_list' problem.id %}">勉強記録一覧</a> </p>
+    <h2>勉強記録新規作成ページ</h2>
+    <form enctype="multipart/form-data" method="post" action="{% url 'app1:answer_register' problem.id %}"　>
+        
+        {% for item in form %}
+            <div class="form-group">
+                <label>{{item.field.label}}</label>
+                {% if forloop.counter0 != 3 and forloop.counter0 != 4 and forloop.counter0 != 5%}
+                    <input name="{{item.name}}" type="{{item.field.widget.input_type}}" class="form-control {% if item.errors %} is-invalid {% endif %}" value="{% if item.value != None %}{{item.value}}{% endif %}">
+                    {% if item.errors %}
+                        <div class="invalid-feedback">
+                           {{item.errors.0}}
+                       </div>
+                    {% endif %}
+                {% elif forloop.counter0 == 3 %}
+                    {{form.correct_situation}}
+                {% elif forloop.counter0 == 5 %}
+                    <textarea name="{{item.name}}" class="form-control {% if item.errors %} is-invalid {% endif %}">{% if item.value != None %}{{item.value}}{% endif %}</textarea>
+                     {% if item.errors %}
+                        <div class="invalid-feedback">
+                           {{item.errors.0}}
+                       </div>
+                    {% endif %}
+                {% else %}
+                    <div class="custom-file">
+                       <input type="file" class="custom-file-input" id="custom-file-1" name="{{item.name}}" accept="image/jpeg, image/png" value="{% if item.value != None %}{{item.value}}{% endif %}">
+                       <label class="custom-file-label" for="custom-file-1" id="filename">ここに写真を登録してください</label>
+                     </div>   
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button class="btn btn-primary" type="submit">登録</button>
+       　
+       　{% csrf_token %}
+    </form>
+    
+    <script>
+        $(document).on('change', ':file', function() {
+            var input = $(this);
+            file_name = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            label = document.getElementById('filename')
+            label.innerHTML = file_name
+            var input = $('#custom-file-1')
+            
+            
+        });
+    </script>
+{% endblock %}
+
+

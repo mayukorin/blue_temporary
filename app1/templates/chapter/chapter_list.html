@@ -5,22 +5,10 @@
             {% for chapter in chapters %}
                 <tr>
                     <td>{{chapter.subject.name}} 第{{chapter.number}}章 {{ chapter.name }}</td>
-                    <td>詳細を見る</td>
+                    <td><a href = "{% url 'app1:section_list' chapter.id %}">詳細を見る</a></td>
                 </tr>
             {% endfor %}
-
         </tbody>
     </table><br>
-     <!--
-     <table class="table table-striped">
-        <tbody>
-            {% for n in names %}
-                {{n}}
-            {% endfor %}
-
-        </tbody>
-    </table>]
-    -->
-    
 {% endblock %}  
     

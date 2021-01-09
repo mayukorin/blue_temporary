@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><a href = "{% url 'app1:chapter_list' %}">Home</a> > <a href="{% url 'app1:section_list' answer.problem.problem_group.section.chapter.id %}">{{answer.problem.problem_group.section.chapter.subject.name}} 第{{answer.problem.problem_group.section.chapter.number}}章 {{ answer.problem.problem_group.section.chapter.name }}</a> > <a href="{% url 'app1:problem_group_list' answer.problem.problem_group.section.id %}"> §{{answer.problem.problem_group.section.number}} {{answer.problem.problem_group.section.name}}</a> > <a href="{% url 'app1:problem_list' answer.problem.problem_group.id %}">{{answer.problem.problem_group.name}}{{answer.problem_group.name}}（{{answer.problem.problem_group.problems.all|length}}題）</a> > <a href="{% url 'app1:problem_show' answer.problem.id %}">{{answer.problem.name}}</a> > <a href="{% url 'app1:answer_list' answer.problem.id %}">勉強記録一覧</a> > {{answer.solve_plan_date|date:"Y年m月d日"}}</p>
+    <h2>{{answer.solve_plan_date|date:"Y年m月d日"}}の勉強記録詳細</h2>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>範囲</td>
+                <td>{{answer.problem.problem_group.section.chapter.subject.name}} §{{answer.problem.problem_group.section.number}} {{answer.problem.problem_group.section.name}}</td>
+            </tr>
+            <tr>
+                <td>問題名</td>
+                <td>{{answer.problem.name}}</td>
+            </tr>
+            <tr>
+                <td>詳細</td>
+                <td>{{answer.problem.problem_group.title}}</td>
+            </tr>
+            <tr>
+                <td>解答予定日</td>
+                <td>{{answer.solve_plan_date|date:"Y/m/d H:i"}}</td>
+            </tr>
+            <tr>
+                <td>解答日</td>
+                <td>
+                    {% if answer.solve_date != None %}
+                       {{answer.solve_date|date:"Y/m/d H:i"}}
+                    {% else %}
+                        ー
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>解答状況</td>
+                <td>
+                    {{answer.correct_situation.situation}}
+                </td>
+            </tr>
+            <tr>
+                <td>解答時間</td>
+                <td>
+                     {% if answer.actual_time != 0 and answer.actual_time != None %}
+                        {{answer.actual_time}}分
+                    {% else %}
+                        ー
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p><a href="{% url 'app1:answer_update' answer.id %}">勉強記録を編集する</a></p><br>
+    <h3>解答写真</h3><br>
+    <div class="content">
+        <div><a href="{% url 'app1:photo_register' answer.id %}">解答写真を新規登録する</a></div><br>
+        {% if answer.photo.all %}
+            {% for p in answer.photo.all %}
+                {% if p.reply_comment.all|length != 0 or p.image.url != '' %}
+                    <div class="image_and_explain">
+                        <div class="image">
+                            {% if p.image.url != '' %}
+                                <img src="{{p.image.url}}">
+                            {% else %}
+                                写真は削除されました
+                            {% endif %}
+                            {% if p.reply_comment.all|length == 0 %}
+                                <div class="do">
+                                    <div class="add_reply_comment"><a href="{% url 'app1:reply_comment_register' p.id %}">この写真へのコメントを追加する</a></div>
+                                    {% if p.image.url != '' %}
+                                            <div class="download"><a href="{{p.image.url}}" download>ダウンロード</a></div>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div class="do">
+                                    <div class="add_reply_comment">{{p.reply_comment.all|length}}件のコメント&nbsp;<i id="bar{{p.origin_comment.id}}" class="reply_comment fas fa-chevron-down"></i></div>
+                                    {% if p.image.url != '' %}
+                                        <div class="download"><a href="{{p.image.url}}" download>ダウンロード</a></div>
+                                    {% endif %}    
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="explain">
+                            <span class="username">{{p.origin_comment.by.username}}</span>
+                            &nbsp;&nbsp;{{p.origin_comment.updated_at|date:"Y/m/d H:i"}}
+                            {% if p.origin_comment.updated_at != p.origin_comment.created_at %} (編集済み）{% endif %}
+                            {% if request.user.id == p.origin_comment.by.id %}
+                                &nbsp;<a href="{% url 'app1:origin_comment_update' p.origin_comment.id %}">編集</a>&nbsp;&nbsp;<a href="#" onclick="confirmDestroy({{p.origin_comment.id}})">削除</a>
+                                <form id="form{{p.origin_comment.id}}" method="post" action="{% url 'app1:origin_comment_and_photo_delete' p.origin_comment.id %}">
+                                    {% csrf_token %}
+                                </form>
+                                
+                            {% endif %}
+                            <br>
+                            {{p.origin_comment.comment|linebreaksbr}}
+                        </div>
+                    </div>
+                    {% if p.reply_comment.all|length != 0 %}
+                        <div class="comment_for_photo" id="comment_for_photo{{p.origin_comment.id}}">
+                            <p><a href="{% url 'app1:reply_comment_register' p.id %}">この写真に対するコメントを追加する</a></p>
+                            <table class="table table-bordered">
+                                {% for rc in p.reply_comment.all %}
+                                    <tr>
+                                        <td>
+                                           <span class="username">{{rc.by.username}}</span>
+                                            &nbsp;&nbsp;{{rc.updated_at|date:"Y/m/d H:i"}}
+                                            {% if rc.updated_at != rc.created_at %} (編集済み）{% endif %}
+                                            {% if request.user.id == rc.by.id %}
+                                                &nbsp;<a href="{% url 'app1:reply_comment_update' rc.id %}">編集</a>&nbsp;&nbsp;<a  class="delete" href="#" onclick="confirmDestroy2({{rc.id}})">削除</a>
+                                                <form id="form{{rc.id}}" method="post" action="{% url 'app1:reply_comment_delete' rc.id %}">
+                                                    {% csrf_token %}
+                                                </form>
+                                                
+                                            {% endif %}
+                                            <br>
+                                            {{rc.comment|linebreaksbr}} 
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    {% endif %}
+                <hr><br>
+            {% endif %}
+            {% endfor %}
+        {% else %}
+             解答写真はまだありません
+        {% endif %}
+    </div>
+    <br>
+    <h3>コメント</h3><br>
+    <div class="content"><a href="{% url 'app1:simple_comment_register' answer.id %}">コメントを新規作成する</a></div><br>
+    {% if row_comments %}
+        {% for c in row_comments %}
+            <div class="content comment">
+                <div class="comment_detail">
+                    <span class="username">{{c.by.username}}</span>&nbsp;&nbsp;{{c.updated_at|date:"Y/m/d H:i"}}{% if c.updated_at != c.created_at %} (編集済み）{% endif %}
+                    {% if request.user.id == c.by.id %}
+                        &nbsp;<a href="{% url 'app1:simple_comment_update' c.id %}">編集</a>&nbsp;&nbsp;<a href="#" onclick="confirmDestroy2({{c.id}})">削除</a>
+                        <form id="form{{c.id}}" method="post" action="{% url 'app1:simple_comment_delete' c.id %}">
+                            {% csrf_token %}
+                        </form>
+                        
+                    {% endif %}
+                </div>
+                {{c.comment|linebreaksbr}}
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+        <div class="content">その他のコメントはまだありません</div>
+    {% endif %}
+     <script>
+        function confirmDestroy(id) {
+            if(confirm("写真とコメントが削除されますが、よろしいですか？")) {
+                id = 'form'+id;
+                form = document.getElementById(id);
+                form.submit();
+            }
+        }
+        
+        function confirmDestroy2(id) {
+            if(confirm("本当に削除してよろしいですか？")) {
+                id = 'form'+id;
+                form = document.getElementById(id)
+                
+                form.submit();                
+            }
+        }
+        
+         $('.reply_comment').on('click', (e) => {
+           
+            id = '#' + e.target.id
+            comment_for_photo_id = id.replace('bar', 'comment_for_photo')
+            target_class = ''
+            
+            if (e.target.className == 'reply_comment fas fa-chevron-down') {
+                target_class = 'reply_comment fas fa-chevron-up'
+                $(comment_for_photo_id).show()
+            } else {
+                target_class = 'reply_comment fas fa-chevron-down'
+                $(comment_for_photo_id).hide()
+            }
+            
+           
+            $(id).attr('class', target_class)
+        
+        });
+        
+    </script>
+{% endblock %}
+

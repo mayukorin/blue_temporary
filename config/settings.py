@@ -143,3 +143,8 @@ AUTH_USER_MODEL = 'app1.SiteUser'
 MESSAGE_TAGS = {
     messages.SUCCESS:'alert alert-success'
 }
+
+LOGIN_URL = 'app1:siteUser_login'
+
+IMAGE_ROOT = os.path.join(BASE_DIR, 'images')
+IMAGE_URL = '/images/'

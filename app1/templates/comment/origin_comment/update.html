@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><a href = "{% url 'app1:chapter_list' %}">Home</a> > <a href="{% url 'app1:section_list' origin_comment.answer.problem.problem_group.section.chapter.id %}">{{origin_comment.answer.problem.problem_group.section.chapter.subject.name}} 第{{origin_comment.answer.problem.problem_group.section.chapter.number}}章 {{ origin_comment.answer.problem.problem_group.section.chapter.name }}</a> > <a href="{% url 'app1:problem_group_list' origin_comment.answer.problem.problem_group.section.id %}"> §{{origin_comment.answer.problem.problem_group.section.number}} {{origin_comment.answer.problem.problem_group.section.name}}</a> > <a href="{% url 'app1:problem_list' origin_comment.answer.problem.problem_group.id %}">{{origin_comment.answer.problem.problem_group.name}}{{origin_comment.answer.problem_group.name}}（{{origin_comment.answer.problem.problem_group.problems.all|length}}題）</a> > <a href="{% url 'app1:problem_show' origin_comment.answer.problem.id %}">{{origin_comment.answer.problem.name}}</a> > <a href="{% url 'app1:answer_list' origin_comment.answer.problem.id %}">勉強記録一覧</a> > <a href="{% url 'app1:answer_show' origin_comment.answer.id %}">{{origin_comment.answer.solve_plan_date|date:"Y年m月d日"}}</a></p>
+    <h2>コメント編集ページ</h2><br>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>範囲</td>
+                <td>{{origin_comment.answer.problem.problem_group.section.chapter.subject.name}} §{{origin_comment.answer.problem.problem_group.section.number}} {{origin_comment.answer.problem.problem_group.section.name}}</td>
+            </tr>
+            <tr>
+                <td>問題名</td>
+                <td>{{origin_comment.answer.problem.name}}</td>
+            </tr>
+            <tr>
+                <td>詳細</td>
+                <td>{{origin_comment.answer.problem.problem_group.title}}</td>
+            </tr>
+            <tr>
+                <td>解答予定日</td>
+                <td>{{origin_comment.answer.solve_plan_date|date:"Y/m/d H:i"}}</td>
+            </tr>
+            <tr>
+                <td>解答日</td>
+                <td>
+                    {% if origin_comment.answer.solve_date != None %}
+                       {{origin_comment.answer.solve_date|date:"Y/m/d H:i"}}
+                    {% else %}
+                        ー
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>解答状況</td>
+                <td>
+                    {{origin_comment.answer.correct_situation.situation}}
+                </td>
+            </tr>
+            <tr>
+                <td>解答時間</td>
+                <td>
+                     {% if origin_comment.answer.actual_time != 0 and origin_comment.answer.actual_time != None %}
+                        {{origin_comment.answer.actual_time}}分
+                    {% else %}
+                        ー
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table><br>
+    <div>
+        <img src="{{origin_comment.origin_photo.image.url}}">
+    </div>  
+    <br>
+    <form method="post" action="{% url 'app1:origin_comment_update' origin_comment.id %}">
+        <div class="form-group">
+            <label>{{form.comment.label}}</label>
+            <textarea name="{{form.comment.name}}" class="form-control {% if form.comment.errors %} is-invalid {% endif %}">{% if form.comment.value != None %}{{form.comment.value}}{% endif %}</textarea>
+            {% if form.comment.errors %}
+                <div class="invalid-feedback">
+                    {{form.comment.errors.0}}
+                </div>
+            {% endif %}
+        </div>
+        <button class="btn btn-primary" type="submit">登録</button>
+   　
+       　{% csrf_token %}
+    </form>
+   
+{% endblock %}

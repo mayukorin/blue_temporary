@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><a href = "{% url 'app1:chapter_list' %}">Home</a> > <a href="{% url 'app1:section_list' reply_comment.answer.problem.problem_group.section.chapter.id %}">{{reply_comment.answer.problem.problem_group.section.chapter.subject.name}} 第{{reply_comment.answer.problem.problem_group.section.chapter.number}}章 {{ reply_comment.answer.problem.problem_group.section.chapter.name }}</a> > <a href="{% url 'app1:problem_group_list' reply_comment.answer.problem.problem_group.section.id %}"> §{{reply_comment.answer.problem.problem_group.section.number}} {{reply_comment.answer.problem.problem_group.section.name}}</a> > <a href="{% url 'app1:problem_list' reply_comment.answer.problem.problem_group.id %}">{{reply_comment.answer.problem.problem_group.name}}{{reply_comment.answer.problem_group.name}}（{{reply_comment.answer.problem.problem_group.problems.all|length}}題）</a> > <a href="{% url 'app1:problem_show' reply_comment.answer.problem.id %}">{{reply_comment.answer.problem.name}}</a> > <a href="{% url 'app1:answer_list' reply_comment.answer.problem.id %}">勉強記録一覧</a> > <a href="{% url 'app1:answer_show' reply_comment.answer.id %}">{{reply_comment.answer.solve_plan_date|date:"Y年m月d日"}}</a></p>
+    <h2>返信コメント編集ページ</h2>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>範囲</td>
+                <td>{{reply_comment.answer.problem.problem_group.section.chapter.subject.name}} §{{reply_comment.answer.problem.problem_group.section.number}} {{reply_comment.answer.problem.problem_group.section.name}}</td>
+            </tr>
+            <tr>
+                <td>問題名</td>
+                <td>{{reply_comment.answer.problem.name}}</td>
+            </tr>
+            <tr>
+                <td>詳細</td>
+                <td>{{reply_comment.answer.problem.problem_group.title}}</td>
+            </tr>
+            <tr>
+                <td>解答予定日</td>
+                <td>{{reply_comment.answer.solve_plan_date|date:"Y/m/d H:i"}}</td>
+            </tr>
+            <tr>
+                <td>解答日</td>
+                <td>
+                    {% if reply_comment.answer.solve_date != None %}
+                       {{reply_comment.answer.solve_date|date:"Y/m/d H:i"}}
+                    {% else %}
+                        ー
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>解答状況</td>
+                <td>
+                    {{reply_comment.answer.correct_situation.situation}}
+                </td>
+            </tr>
+            <tr>
+                <td>解答時間</td>
+                <td>
+                     {% if reply_comment.answer.actual_time != 0 and reply_comment.answer.actual_time != None %}
+                        {{reply_comment.answer.actual_time}}分
+                    {% else %}
+                        ー
+                    {% endif %}
+                </td>
+            </tr>
+    </table>
+    <div class="image_and_explain">
+        <div class="image">
+            {% if reply_comment.photo.image.url != '' %}
+                <img src="{{reply_comment.photo.image.url}}">
+            {% else %}
+                写真は削除されました
+            {% endif %}
+        </div>
+        {% if reply_comment.photo.origin_comment %}
+            <div class="explain">
+                <span class="username">{{reply_comment.photo.origin_comment.by.username}}</span>
+                &nbsp;&nbsp;{{reply_comment.photo.origin_comment.updated_at|date:"Y/m/d H:i"}}
+                {% if reply_comment.photo.origin_comment.updated_at != reply_comment.photo.origin_commentcreated_at %} (編集済み）{% endif %}
+                <br>
+                {{reply_comment.photo.origin_photo.comment|linebreaksbr}}
+            </div>
+        {% endif %}
+    </div><br>
+    <form method="post" action="{% url 'app1:reply_comment_update' reply_comment.id %}">
+         <div class="form-group">
+            <label>{{form.comment.label}}</label>
+            <textarea name="{{form.comment.name}}" class="form-control {% if form.comment.errors %} is-invalid {% endif %}">{% if form.comment.value != None %}{{form.comment.value}}{% endif %}</textarea>
+            {% if form.comment.errors %}
+              <div class="invalid-feedback">{{form.comment.errors.0}}</div>
+          {% endif %}
+        </div>
+        <br><button class="btn btn-primary" type="submit">登録</button>
+       　
+   　    {% csrf_token %}  
+    </form>
+    
+{% endblock %}

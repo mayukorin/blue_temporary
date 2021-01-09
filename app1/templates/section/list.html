@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><a href = "{% url 'app1:chapter_list' %}">Home</a> > {{chapter.subject.name}} 第{{chapter.number}}章 {{ chapter.name }}</p>
+    <table class="table table-striped">
+        <tbody>
+            {% for section in sections %}
+                <tr>
+                    <td> §{{section.number}} {{ section.name }}</td>
+                    <td><a href="{% url 'app1:problem_group_list' section.id %}">詳細を見る</a></td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}
+
