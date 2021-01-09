@@ -8,15 +8,15 @@
 
 # Features
 
-会員登録ができるところまで 
+勉強記録の登録や更新ができるところまで 
 
 # Requirement
 
-"hoge"を動かすのに必要なライブラリなどを列挙する
 
 * Django
 * PostgreSQL
 * psycopg2
+* Pillow
 
 # Installation
 
@@ -24,6 +24,7 @@ Requirementで列挙したライブラリなどのインストール方法を説
 
 1. PostgreSQLをインストールする  
 1. psycopg2をインストールする  
+1. Pillowをインストールする  
 1. インストール時に設定したパスワードを使い、コマンドプロンプト（ターミナル）で  PostgreSQLにログイン  
 ```psql -U postgres```  
 1. データベースを所有するためのユーザを作成する
