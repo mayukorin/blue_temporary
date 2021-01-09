@@ -31,8 +31,9 @@ Requirementで列挙したライブラリなどのインストール方法を説
 ```create role （ユーザ名） with login password (パスワード);```
 1. データベースを作成する（4で作成したユーザーを所有者にする）  
 ```create database （データベース名) with owner (4で作成したユーザ名);```
-1. app1/config/settings.pyのDATABASESを編集する
+1. app1/config/settings/の下にlocal.pyを作り、以下のように編集する
 ```
+from .base import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
