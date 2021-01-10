@@ -51,8 +51,15 @@ DATABASES = {
 ```python manage.py migrate```  
 を実行  
 
-
-
+1. 
+```
+python manage.py createsuperuser
+```
+を実行し、スーパーユーザを作る  
+1. 
+```python manage.py runserver```
+でhttp://127.0.0.1:8000/admin にアクセス  
+先ほど作成したスーパーユーザでログインし、Correct Situationsモデルに「未回答」、「正解」、「不正解」、「採点待ち」を追加
 
 # Usage
 

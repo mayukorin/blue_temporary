@@ -56,7 +56,6 @@ class AnswerRegisterForm(forms.ModelForm):
     def clean_photo(self):
         
         photo = self.cleaned_data['photo']
-        print(photo)
         
         return photo
     
