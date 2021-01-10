@@ -9,6 +9,8 @@ from app1.models.problem import Problem
 from app1.models.similar import Similar
 from app1.models.develop import Develop
 from app1.models.photo import Photo
+from app1.models.answer import Answer
+from app1.models.correct_situation import CorrectSituation
 # Register your models here.
 
 
@@ -27,4 +29,6 @@ admin.site.register(Problem)
 admin.site.register(Similar)
 admin.site.register(Develop)
 admin.site.register(Photo)
+admin.site.register(Answer)
+admin.site.register(CorrectSituation)
 # Register your models here.
