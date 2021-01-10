@@ -1,18 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-    <p><a href = "{% url 'app1:chapter_list' %}">章一覧</a> > <a href="{% url 'app1:section_list' problem.problem_group.section.chapter.id %}">{{problem.problem_group.section.chapter.subject.name}} 第{{problem.problem_group.section.chapter.number}}章 {{ problem.problem_group.section.chapter.name }}</a> > <a href="{% url 'app1:problem_group_list' problem.problem_group.section.id %}"> §{{problem.problem_group.section.number}} {{problem.problem_group.section.name}}</a> > <a href="{% url 'app1:problem_list' problem.problem_group.id %}">{{problem.problem_group.name}}（{{problem.problem_group.problems.all|length}}題）</a> > <a href="{% url 'app1:problem_show' problem.id %}">{{problem.name}}</a> > 勉強記録一覧</p>
-    <h2>{{problem.name}}の勉強記録一覧</h2><br>
-    <p><a href="{% url 'app1:answer_register' problem.id %}">勉強記録を新規登録する</a></p>
+    <h2>{{user.reference_user.username}}の勉強記録一覧</h2><br>
     {% if answers|length != 0 %}
     <table class="table table-hover">
         <tbody>
             <tr>
+                <th>問題</th>
                 <th>解答予定日</th>
                 <th>解答日</th>
                 <th>解答状況</th>
             </tr>
             {% for answer in answers %}
-                <tr data-href="{% url 'app1:answer_show' answer.id %}" >
+                <tr data-href="{% url 'app1:answer_show' answer.id %}" >    
+                    <td>
+                        {% if answer.problem.problem_group.number < 0 %}
+                            {{answer.problem.problem_group.section.chapter.subject.name}} §{{answer.problem_group.section.number}} {{answer.to_problem.name}}
+                        {% else %}
+                            {{answer.problem.name}}
+                        {% endif %}
+                    </td>
                     <td>{{answer.solve_plan_date|date:"Y/m/d H:i"}}</td>
                     <td>{{answer.solve_date|date:"Y/m/d H:i"}}</td>
                     <td>
@@ -40,4 +46,3 @@
         });
     </script>
 {% endblock %}
-  

@@ -99,7 +99,7 @@ class AnswerUpdateView(LoginRequiredMixin, View):
 answer_update_view = AnswerUpdateView.as_view()
 
 
-class AnswerListView(LoginRequiredMixin, View):
+class AnswerToProblemListView(LoginRequiredMixin, View):
     
     def get(self, request, problem_id, *args, **kwargs):
         
@@ -108,7 +108,18 @@ class AnswerListView(LoginRequiredMixin, View):
         
         return render(request, 'answer/list.html', {'answers': answers, 'problem': problem})
     
-answer_list_view = AnswerListView.as_view()
+answer_to_problem_list_view = AnswerToProblemListView.as_view()
+
+
+class AnswerAllListView(LoginRequiredMixin, View):
+    
+    def get(self, request, *args, **kwargs):
+        
+        answers = Answer.objects.filter(student=request.user.reference_user).order_by('solve_plan_date')
+        
+        return render(request, 'answer/all_list.html', {'answers': answers})
+
+answer_all_list_view = AnswerAllListView.as_view()
 
 
 class AnswerShowView(LoginRequiredMixin, View):

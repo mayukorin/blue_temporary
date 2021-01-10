@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <p><a href = "{% url 'app1:chapter_list' %}">Home</a> > {{chapter.subject.name}} 第{{chapter.number}}章 {{ chapter.name }}</p>
+    <p><a href = "{% url 'app1:chapter_list' %}">章一覧</a> > {{chapter.subject.name}} 第{{chapter.number}}章 {{ chapter.name }}</p>
     <table class="table table-striped">
         <tbody>
             {% for section in sections %}

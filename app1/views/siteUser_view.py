@@ -64,7 +64,7 @@ class SiteUserLoginView(View):
         
         messages.success(request, 'こんにちは'+request.user.username+'さん')
         
-        return redirect('app1:chapter_list')
+        return redirect('app1:answer_all_list')
         
 
 siteUser_login = SiteUserLoginView.as_view()
@@ -111,7 +111,7 @@ class ReferenceUserLoginView(View):
         
         messages.success(request, student.username+'さんのページへログインしました')
         
-        return redirect('app1:chapter_list')
+        return redirect('app1:answer_all_list')
         
     
 reference_user_login_view = ReferenceUserLoginView.as_view()
@@ -128,6 +128,6 @@ class ReferenceUserLogoutView(View):
             
             messages.success(request, reference_user_name+'さんのページをログアウトしました')
             
-        return redirect('app1:chapter_list')
+        return redirect('app1:answer_all_list')
 
 reference_user_logout_view = ReferenceUserLogoutView.as_view()
