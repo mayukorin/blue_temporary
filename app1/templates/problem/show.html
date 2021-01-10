@@ -28,14 +28,14 @@
     {% if problem.from_problem.all|length != 0 or problem.to_problem.all|length != 0 %}
         {% for similar in problem.from_problem.all %}
             
-            {% if similar.to_problem.problem_group.number > 0 %}
+            {% if similar.to_problem.problem_group.number < 0 %}
                 <a href="{% url 'app1:problem_show' similar.to_problem.id %}">{{similar.to_problem.problem_group.section.chapter.subject.name}} §{{similar.to_problem.problem_group.section.number}} {{similar.to_problem.name}}</a>&nbsp;
             {% else %}
                 <a href="{% url 'app1:problem_show' similar.to_problem.id %}">{{similar.to_problem.name}}</a>&nbsp;
             {% endif %}
         {% endfor %}
         {% for similar in problem.to_problem.all %}
-            {% if similar.from_problem.problem_group.number > 0 %}
+            {% if similar.from_problem.problem_group.number < 0 %}
                 <a href="{% url 'app1:problem_show' similar.from_problem.id %}">{{similar.from_problem.problem_group.section.chapter.subject.name}} §{{similar.from_problem.problem_group.section.number}} {{similar.from_problem.name}}</a>&nbsp;
             {% else %}
                 <a href="{% url 'app1:problem_show' similar.from_problem.id %}">{{similar.from_problem.name}}</a>&nbsp;
@@ -47,7 +47,7 @@
     <p class="index">基礎問題</p>
     {% if problem.difficult.all|length != 0 %}
         {% for develop in problem.difficult.all %}
-            {% if develop.from_problem.problem_group.number > 0 %}
+            {% if develop.from_problem.problem_group.number < 0 %}
                 <a href="{% url 'app1:problem_show' develop.from_problem.id %}">{{develop.from_problem.problem_group.section.chapter.subject.name}} §{{develop.from_problem.problem_group.section.number}} {{develop.from_problem.name}}</a>&nbsp;
             {% else %}
                 <a href="{% url 'app1:problem_show' develop.from_problem.id %}">{{develop.from_problem.name}}</a>&nbsp;
@@ -59,7 +59,7 @@
     <p class="index">発展問題</p>
     {% if problem.easy.all|length != 0 %}
         {% for develop in problem.easy.all %}
-            {% if develop.to_problem.problem_group.number > 0 %}
+            {% if develop.to_problem.problem_group.number < 0 %}
                 <a href="{% url 'app1:problem_show' develop.to_problem.id %}">{{develop.to_problem.problem_group.section.chapter.subject.name}} §{{develop.to_problem.problem_group.section.number}} {{develop.to_problem.name}}</a>&nbsp;
             {% else %}
                 <a href="{% url 'app1:problem_show' develop.to_problem.id %}">{{develop.to_problem.name}}</a>&nbsp;
