@@ -55,7 +55,8 @@ DATABASES = {
 ```
 python manage.py createsuperuser
 ```
-を実行し、スーパーユーザを作る  
+を実行し、スーパーユーザを作る 
+ 
 1. 
 ```python manage.py runserver```
 でhttp://127.0.0.1:8000/admin にアクセス  
