@@ -128,8 +128,8 @@
     <br>
     <h3>コメント</h3><br>
     <div class="content"><a href="{% url 'app1:simple_comment_register' answer.id %}">コメントを新規作成する</a></div><br>
-    {% if row_comments %}
-        {% for c in row_comments %}
+    {% if simple_comments %}
+        {% for c in simple_comments %}
             <div class="content comment">
                 <div class="comment_detail">
                     <span class="username">{{c.by.username}}</span>&nbsp;&nbsp;{{c.updated_at|date:"Y/m/d H:i"}}{% if c.updated_at != c.created_at %} (編集済み）{% endif %}
@@ -146,7 +146,7 @@
             <br>
         {% endfor %}
     {% else %}
-        <div class="content">その他のコメントはまだありません</div>
+        <div class="content">コメントはまだありません</div>
     {% endif %}
      <script>
         function confirmDestroy(id) {

@@ -14,12 +14,14 @@ app_name = 'app1'
 
 urlpatterns = [
     
-    path('',views.chapter_view.chapter_list,name='chapter_list'),
-    path('siteUser/register',views.siteUser_view.siteUser_register,name='siteUser_register'),
-    path('siteUser/logout',views.siteUser_view.siteUser_logout,name='siteUser_logout'),
-    path('siteUser/login',views.siteUser_view.siteUser_login,name='siteUser_login'),
-    path('chapter/list',views.chapter_view.chapter_list, name='chapter_list'),
-    path('section/list/<int:chapter_id>/',views.section_view.section_list_view, name='section_list'),
+    path('', views.chapter_view.chapter_list, name='chapter_list'),
+    path('siteUser/register', views.siteUser_view.siteUser_register, name='siteUser_register'),
+    path('siteUser/logout', views.siteUser_view.siteUser_logout, name='siteUser_logout'),
+    path('siteUser/login', views.siteUser_view.siteUser_login, name='siteUser_login'),
+    path('siteUser/reference_user/login', views.siteUser_view.reference_user_login_view, name='reference_user_login'),
+    path('siteUser/reference_user/logout', views.siteUser_view.reference_user_logout_view, name='reference_user_logout'),
+    path('chapter/list', views.chapter_view.chapter_list, name='chapter_list'),
+    path('section/list/<int:chapter_id>/', views.section_view.section_list_view, name='section_list'),
     path('problem_group/list/<int:section_id>/', views.problem_group_view.problem_group_list_view, name='problem_group_list'),
     path('problem/list/<int:problem_group_id>/', views.problem_view.problem_list_view, name='problem_list'),
     path('problem/search', views.problem_view.problem_search_view, name='problem_search'),

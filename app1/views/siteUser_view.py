@@ -84,3 +84,50 @@ class SiteUserLogoutView(View):
     
     
 siteUser_logout = SiteUserLogoutView.as_view()
+
+
+class ReferenceUserLoginView(View):
+    
+    def get(self, request, *args, **kwargs):
+        
+        context = {
+            'form': SiteUserLoginForm(),
+            }
+        
+        return render(request, 'siteUser/student/login.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        
+        form = SiteUserLoginForm(request.POST)
+        
+        if not form.is_valid():
+            
+            return render(request, 'siteUser/student/login.html', {'form': form})
+        
+        student = form.get_user()
+        
+        request.user.reference_user = student
+        request.user.save()
+        
+        messages.success(request, student.username+'さんのページへログインしました')
+        
+        return redirect('app1:chapter_list')
+        
+    
+reference_user_login_view = ReferenceUserLoginView.as_view()
+
+class ReferenceUserLogoutView(View):
+    
+    def get(self, request, *args, **kwargs):
+        
+        if request.user.reference_user.id != request.user.id:
+            
+            reference_user_name = request.user.reference_user.username
+            request.user.reference_user = request.user
+            request.user.save()
+            
+            messages.success(request, reference_user_name+'さんのページをログアウトしました')
+            
+        return redirect('app1:chapter_list')
+
+reference_user_logout_view = ReferenceUserLogoutView.as_view()

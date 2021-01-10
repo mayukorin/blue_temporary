@@ -116,8 +116,8 @@ class AnswerShowView(LoginRequiredMixin, View):
     def get(self, request, answer_id, *args, **kwargs):
         
         answer = Answer.objects.get(pk=answer_id)
-        row_comments = Comment.objects.filter(origin_photo=None).filter(photo=None).filter(answer__student=request.user.reference_user)
+        simple_comments = Comment.objects.filter(origin_photo=None).filter(photo=None).filter(answer__id=answer_id)
        
-        return render(request, 'answer/show.html', {'answer': answer, 'row_comments': row_comments})
+        return render(request, 'answer/show.html', {'answer': answer, 'simple_comments': simple_comments})
     
 answer_show_view = AnswerShowView.as_view()

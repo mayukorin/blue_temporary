@@ -15,7 +15,7 @@ class ProblemGroupListView(LoginRequiredMixin, View):
     
     def get(self, request, section_id, *args, **kwargs):
         
-        problem_groups = Problem_group.objects.filter(section__id=section_id).order_by('number')
+        problem_groups = Problem_group.objects.filter(section__id=section_id).order_by('page')
         section = Section.objects.get(pk=section_id)
         
         return render(request, 'problem_group/list.html', {'problem_groups': problem_groups, 'section': section})
