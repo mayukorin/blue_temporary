@@ -20,3 +20,11 @@ DATABASES = {
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 ALLOWED_HOSTS = ['*']
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'hgdgvhsyb',
+    'API_KEY': '486584728357188',
+    'API_SECRET': '1EkhtDKOjzMLb4PDaj8x4mfrnho'
+}

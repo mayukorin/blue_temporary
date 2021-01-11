@@ -17,6 +17,7 @@ certifi==2020.12.5
 cffi==1.14.4
 chardet==4.0.0
 click==7.1.2
+cloudinary==1.24.0
 cloudpickle==1.6.0
 colorama==0.4.4
 cryptography==3.3.1
@@ -26,6 +27,7 @@ diff-match-patch==20200713
 dj-database-url==0.5.0
 dj-static==0.0.6
 Django==3.1.5
+django-cloudinary-storage==0.3.0
 django-crispy-forms==1.10.0
 django-heroku==0.3.1
 django-toolbelt==0.0.1
@@ -91,6 +93,7 @@ python-dateutil==2.8.1
 python-jsonrpc-server==0.4.0
 python-language-server==0.36.2
 pytz==2020.5
+pywin32==227
 pywin32-ctypes==0.2.0
 PyYAML==5.3.1
 pyzmq==20.0.0
