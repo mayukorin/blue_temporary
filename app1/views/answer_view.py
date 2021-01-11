@@ -16,6 +16,7 @@ from app1.models.answer import Answer
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+import cloudinary
 
 
 class AnswerRegisterView(LoginRequiredMixin, View):
@@ -128,6 +129,11 @@ class AnswerShowView(LoginRequiredMixin, View):
         
         answer = Answer.objects.get(pk=answer_id)
         simple_comments = Comment.objects.filter(origin_photo=None).filter(photo=None).filter(answer__id=answer_id)
+        
+        res = cloudinary.api.resources(type="upload", perfix="image/")
+        
+        for img in res["resources"]:
+            print(img.public_id)
        
         return render(request, 'answer/show.html', {'answer': answer, 'simple_comments': simple_comments})
     
