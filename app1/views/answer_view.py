@@ -129,6 +129,9 @@ class AnswerShowView(LoginRequiredMixin, View):
         
         answer = Answer.objects.get(pk=answer_id)
         simple_comments = Comment.objects.filter(origin_photo=None).filter(photo=None).filter(answer__id=answer_id)
+        photos = Photo.objects.all()
+        print("okkk")
+        print(photos[0].image)
         
         
        
