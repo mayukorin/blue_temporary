@@ -129,17 +129,7 @@ class AnswerShowView(LoginRequiredMixin, View):
         
         answer = Answer.objects.get(pk=answer_id)
         simple_comments = Comment.objects.filter(origin_photo=None).filter(photo=None).filter(answer__id=answer_id)
-        photos = Photo.objects.all()
-        print("okkk")
-        print(len(photos))
         
-        for p in photos:
-            print("a")
-            print(str(p.image))
-        
-        
-        
-       
         return render(request, 'answer/show.html', {'answer': answer, 'simple_comments': simple_comments})
     
 answer_show_view = AnswerShowView.as_view()

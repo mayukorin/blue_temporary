@@ -62,6 +62,10 @@ python manage.py createsuperuser
 でhttp://127.0.0.1:8000/admin にアクセス  
 先ほど作成したスーパーユーザでログインし、Correct Situationsモデルに「未回答」、「正解」、「不正解」、「採点待ち」を追加
 
+# 注意  
+ローカル環境で動作させる場合は、comment_viewの144行目あたりにある
+```ret = cloudinary.uploader.destroy(public_id = str(photo.image))```
+はコメントアウトしたままにしておくこと
 # Usage
 
 ```python manage.py runserver```でhttp://127.0.0.1:8000/siteUser/login にアクセス  

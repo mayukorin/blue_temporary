@@ -140,11 +140,10 @@ class OriginCommentAndPhotoDeleteView(LoginRequiredMixin, View):
         origin_comment.delete()
         
         photo = Photo.objects.get(pk=origin_photo_id)
-        print("aa")
-        print(str(photo.image))
-        ret = cloudinary.uploader.destroy(public_id = str(photo.image))
-       
-        #os.remove(str(photo.image))
+        
+        #ret = cloudinary.uploader.destroy(public_id = str(photo.image))
+        os.remove(str(photo.image))
+        
         photo.image = ""
         photo.save()
         
