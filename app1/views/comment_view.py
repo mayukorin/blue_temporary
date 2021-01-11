@@ -138,6 +138,8 @@ class OriginCommentAndPhotoDeleteView(LoginRequiredMixin, View):
         origin_comment.delete()
         
         photo = Photo.objects.get(pk=origin_photo_id)
+        print("aa")
+        print(str(photo.image))
        
         os.remove(str(photo.image))
         photo.image = ""
