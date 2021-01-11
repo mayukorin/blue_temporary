@@ -131,6 +131,7 @@ class AnswerShowView(LoginRequiredMixin, View):
         simple_comments = Comment.objects.filter(origin_photo=None).filter(photo=None).filter(answer__id=answer_id)
         photos = Photo.objects.all()
         print("okkk")
+        print(len(photos))
         print(photos[0].image)
         
         
