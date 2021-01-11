@@ -9,6 +9,7 @@ Created on Sat Jan  9 20:18:25 2021
 from .base import *
 import dj_database_url
 from socket import gethostname
+import cloudinary
 
 hostname = gethostname()
 
@@ -28,3 +29,9 @@ CLOUDINARY_STORAGE = {
     'API_KEY': '486584728357188',
     'API_SECRET': '1EkhtDKOjzMLb4PDaj8x4mfrnho'
 }
+
+cloudinary.config(
+  cloud_name = "hgdgvhsyb",
+  api_key = "486584728357188",
+  api_secret = "1EkhtDKOjzMLb4PDaj8x4mfrnho"
+)
