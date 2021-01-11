@@ -16,6 +16,8 @@ from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 import os
+from cloudinary import CloudinaryImage
+import cloudinary, cloudinary.uploader, cloudinary.forms, cloudinary.api
 
 
 class SimpleCommentRegisterView(LoginRequiredMixin, View):
@@ -140,8 +142,9 @@ class OriginCommentAndPhotoDeleteView(LoginRequiredMixin, View):
         photo = Photo.objects.get(pk=origin_photo_id)
         print("aa")
         print(str(photo.image))
+        ret = cloudinary.uploader.destroy(public_id = str(photo.image))
        
-        os.remove(str(photo.image))
+        #os.remove(str(photo.image))
         photo.image = ""
         photo.save()
         
