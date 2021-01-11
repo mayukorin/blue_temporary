@@ -132,7 +132,11 @@ class AnswerShowView(LoginRequiredMixin, View):
         photos = Photo.objects.all()
         print("okkk")
         print(len(photos))
-        print(str(photos[1].image))
+        
+        for p in photos:
+            print("a")
+            print(str(p.image))
+        
         
         
        
