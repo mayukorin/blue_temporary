@@ -132,7 +132,7 @@ class AnswerShowView(LoginRequiredMixin, View):
         photos = Photo.objects.all()
         print("okkk")
         print(len(photos))
-        print(photos[0].image.url)
+        print(str(photos[0].image))
         
         
        
