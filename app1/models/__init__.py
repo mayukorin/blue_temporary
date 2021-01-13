@@ -16,3 +16,6 @@ from app1.models.correct_situation import CorrectSituation
 from app1.models.answer import Answer
 from app1.models.comment import Comment
 from app1.models.photo import Photo
+from app1.models.type import Type
+from app1.models.evaluation_tag import EvaluationTag
+from app1.models.by import By

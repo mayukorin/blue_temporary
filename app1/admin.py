@@ -11,6 +11,7 @@ from app1.models.develop import Develop
 from app1.models.photo import Photo
 from app1.models.answer import Answer
 from app1.models.correct_situation import CorrectSituation
+from app1.models.type import Type
 # Register your models here.
 
 
@@ -31,4 +32,5 @@ admin.site.register(Develop)
 admin.site.register(Photo)
 admin.site.register(Answer)
 admin.site.register(CorrectSituation)
+admin.site.register(Type)
 # Register your models here.

@@ -2,9 +2,11 @@ from django.views import View
 from app1.models.problem_group import Problem_group
 from app1.models.problem import Problem
 from app1.models.subject import Subject
+from app1.models.by import By
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from app1.forms.problemForm import SearchForm
+from django.db.models import Count
 
 
 class ProblemListView(LoginRequiredMixin, View):
@@ -106,7 +108,9 @@ class ProblemShowView(LoginRequiredMixin, View):
     def get(self, request, problem_id, *args, **kwargs):
         
         problem = Problem.objects.get(pk=problem_id)
-        return render(request, 'problem/show.html', {'problem': problem})
+        evaluations = By.objects.select_related().filter(problem=problem).values('evaluation_tag', 'evaluation_tag__content', 'evaluation_tag__evaluation_type__id').annotate(total=Count('evaluation_tag'))
+        print(evaluations)
+        return render(request, 'problem/show.html', {'problem': problem, 'evaluations': evaluations})
     
     
 problem_show_view = ProblemShowView.as_view()

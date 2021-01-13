@@ -40,6 +40,7 @@ urlpatterns = [
     path('comment/origin_comment/delete/<int:origin_comment_id>/', views.comment_view.origin_comment_and_photo_delete_view, name='origin_comment_and_photo_delete'),
     path('comment/reply_comment/delete/<int:reply_comment_id>/', views.comment_view.reply_comment_delete_view, name='reply_comment_delete'),
     path('photo/register/<int:answer_id>/', views.photo_view.photo_register_view, name='photo_register'),
+    path('evaluation/register/<int:problem_id>/', views.evaluation_tag_view.evaluation_tag_register_view, name='evaluation_tag_register'),
    
     
 ]

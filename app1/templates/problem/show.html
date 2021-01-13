@@ -70,5 +70,20 @@
     {% endif %}
     <br>
     <p><a href="{% url 'app1:answer_list' problem.id %}">勉強記録一覧を見る</a></p>
+    <p class="index">評価タグ</p>
+    {% if evaluations|length != 0 %}
+        {% for e in evaluations %}
+            <div>
+            <span class="evaluation tag{{e.evaluation_tag__evaluation_type__id}}">
+                {{e.evaluation_tag__content}}
+            </span>
+            &nbsp;
+            {{e.total}}件
+            </div><br>
+        {% endfor %}
+    {% else %}
+        評価タグはまだありません
+    {% endif %}
+    <p><a href="{% url 'app1:evaluation_tag_register' problem.id %}">評価タグを登録する</a></p>
     
 {% endblock %}

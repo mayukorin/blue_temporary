@@ -12,4 +12,5 @@ from app1.views.problem_view import ProblemListView
 from app1.views.answer_view import AnswerRegisterView
 from app1.views.comment_view import ReplyCommentUpdateView
 from app1.views.photo_view import PhotoRegisterView
+from app1.views.evaluation_tag_view import EvaluationTagRegisterView
 
