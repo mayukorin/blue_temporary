@@ -3,4 +3,4 @@ db.sqlite3
 myvenv
 __pycache__
 config/settings/local.py
-
+config/settings/product.py
