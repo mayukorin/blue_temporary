@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'app1.apps.App1Config',
     'crispy_forms',
     'cloudinary_storage',
+    'django.forms',
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,5 @@ LOGIN_URL = 'app1:siteUser_login'
 
 IMAGE_ROOT = os.path.join(BASE_DIR, 'images')
 IMAGE_URL = '/images/'
+
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'

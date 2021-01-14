@@ -14,9 +14,11 @@ from app1.models.photo import Photo
 from app1.models.comment import Comment
 from app1.models.answer import Answer
 from app1.models.by import By
+from app1.models.evaluation_tag import EvaluationTag
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.http import JsonResponse
 
 
 class EvaluationTagRegisterView(LoginRequiredMixin, View):
@@ -59,3 +61,24 @@ class EvaluationTagRegisterView(LoginRequiredMixin, View):
         
 
 evaluation_tag_register_view = EvaluationTagRegisterView.as_view() 
+
+
+class EvaluationTagSuggestView(LoginRequiredMixin, View):
+    
+    def get(self, request, *args, **kwargs):
+        
+        keyword = request.GET.get('keyword')
+        print(keyword)
+        if keyword:
+            
+            evaluation_tag_list = [{'pk': ev.pk, 'content': ev.content, 'type_id': ev.evaluation_type.id } for ev in EvaluationTag.objects.filter(content__icontains=keyword)]
+            
+        else:
+            
+            evaluation_tag_list = []
+        
+        
+        return JsonResponse({'object_list': evaluation_tag_list})
+
+
+evaluation_tag_suggest_view = EvaluationTagSuggestView.as_view()

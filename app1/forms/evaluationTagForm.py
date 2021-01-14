@@ -10,14 +10,15 @@ from django import forms
 from app1.models.evaluation_tag import EvaluationTag
 from app1.models.type import Type
 from django.core.exceptions import ObjectDoesNotExist
-
+from app1.widgets import SuggestWidget
+from django.urls import reverse_lazy
 
 class EvaluationTagRegisterForm(forms.ModelForm):
     
     class Meta:
         model = EvaluationTag
         
-        fields = ('content', 'evaluation_type',)
+        fields = ('evaluation_type','content',)
         
         labels = {
             'content': '評価タグの内容',
@@ -25,34 +26,40 @@ class EvaluationTagRegisterForm(forms.ModelForm):
             }
         
         widgets = {
-            'content': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': SuggestWidget(attrs={'data-url': reverse_lazy('app1:evaluation_tag_suggest'), 'name': 'content'}),
+            #'content': forms.TextInput(),
             'evaluation_type': forms.Select(attrs={'class': 'form-control'})
             }
         
         
         
         
-    evaluation_type = forms.ModelChoiceField(queryset=Type.objects.all(),
+    evaluation_type = forms.ModelChoiceField(queryset=Type.objects.all().order_by('id'),
                                              empty_label=None,
                                              label='主に身につくこと',
                                              widget=forms.Select(attrs={'class': 'form-control'}))
     
     
+    
+    
     def __init__(self, *args, **kwargs):
         
         super().__init__(*args, **kwargs)
+        a = SuggestWidget()
+        print(a.media)
         
         self.fields['content'].required = False
         
         if self.errors and 'content' in self.errors:
             
-            self.fields['content'].widget.attrs = {'class': 'form-control is-invalid'}
+            self.fields['content'].widget.attrs.update({'class': 'form-control is-invalid suggest'})
             
             
     def clean_content(self):
         
         content = self.cleaned_data['content']
-        
+        print("ooo")
+        print(content)
         if content is None:
             
             raise forms.ValidationError('評価タグの内容を入力してください')
