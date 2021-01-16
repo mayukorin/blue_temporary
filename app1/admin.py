@@ -12,6 +12,8 @@ from app1.models.photo import Photo
 from app1.models.answer import Answer
 from app1.models.correct_situation import CorrectSituation
 from app1.models.type import Type
+from app1.models.evaluation_tag import EvaluationTag
+from app1.models.by import By
 # Register your models here.
 
 
@@ -33,4 +35,6 @@ admin.site.register(Photo)
 admin.site.register(Answer)
 admin.site.register(CorrectSituation)
 admin.site.register(Type)
+admin.site.register(EvaluationTag)
+admin.site.register(By)
 # Register your models here.
