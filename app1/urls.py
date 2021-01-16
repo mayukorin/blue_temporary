@@ -42,6 +42,12 @@ urlpatterns = [
     path('photo/register/<int:answer_id>/', views.photo_view.photo_register_view, name='photo_register'),
     path('evaluation/register/<int:problem_id>/', views.evaluation_tag_view.evaluation_tag_register_view, name='evaluation_tag_register'),
     path('evaluation/suggest/', views.evaluation_tag_view.evaluation_tag_suggest_view, name='evaluation_tag_suggest'),
+    path('evaluation/release/<int:problem_id>/<int:evaluation_tag_id>/', views.evaluation_tag_view.evaluation_tag_release_view, name='evaluation_tag_release'), 
+    path('by/register/<int:problem_id>/<int:evaluation_tag_id>/<str:evaluation_tag_content>/<int:evaluation_tag_type>/<int:my_by_status>/<int:good_flag>/', views.by_view.by_register_view, name='by_register'),
+    path('by/comment_list/<int:problem_id>/<int:evaluation_tag_id>/<str:evaluation_tag_content>/<int:evaluation_tag_type>/', views.by_view.by_comment_list_view, name='by_comment_list'),
+    path('by_comment/update/<int:by_comment_id>/', views.by_comment_view.by_comment_update_view, name='by_comment_update'),
+    path('by_comment/delete/<int:by_comment_id>/', views.by_comment_view.by_comment_delete_view, name='by_comment_delete'),
+    path('by/comment_register/<int:problem_id>/<int:evaluation_tag_id>/<str:evaluation_tag_content>/<int:evaluation_tag_type>/', views.by_comment_view.by_comment_register_view, name='by_comment_register'),
    
     
 ]

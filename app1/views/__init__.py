@@ -13,4 +13,6 @@ from app1.views.answer_view import AnswerRegisterView
 from app1.views.comment_view import ReplyCommentUpdateView
 from app1.views.photo_view import PhotoRegisterView
 from app1.views.evaluation_tag_view import EvaluationTagRegisterView
+from app1.views.by_view import ByRegisterView
+from app1.views.by_comment_view import ByCommentUpdateView
 

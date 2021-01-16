@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
     <p><a href = "{% url 'app1:chapter_list' %}">章一覧</a> > <a href="{% url 'app1:section_list' problem.problem_group.section.chapter.id %}">{{problem.problem_group.section.chapter.subject.name}} 第{{problem.problem_group.section.chapter.number}}章 {{ problem.problem_group.section.chapter.name }}</a> > <a href="{% url 'app1:problem_group_list' problem.problem_group.section.id %}"> §{{problem.problem_group.section.number}} {{problem.problem_group.section.name}}</a> > <a href="{% url 'app1:problem_list' problem.problem_group.id %}">{{problem.problem_group.name}}{{problem_group.name}}（{{problem.problem_group.problems.all|length}}題）</a> > <a href="{% url 'app1:problem_show' problem.id %}">{{problem.name}}</a></p>
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    
     <h2>評価タグ登録ページ</h2><br>
     <form method="post" action="{% url 'app1:evaluation_tag_register' problem.id %}">
         {% for item in form %}

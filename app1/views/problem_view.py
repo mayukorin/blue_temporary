@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from app1.forms.problemForm import SearchForm
 from django.db.models import Count
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class ProblemListView(LoginRequiredMixin, View):
@@ -109,7 +110,29 @@ class ProblemShowView(LoginRequiredMixin, View):
         
         problem = Problem.objects.get(pk=problem_id)
         evaluations = By.objects.select_related().filter(problem=problem).values('evaluation_tag', 'evaluation_tag__content', 'evaluation_tag__evaluation_type__id').annotate(total=Count('evaluation_tag'))
-        print(evaluations)
+        
+        
+        for ev in evaluations:
+            
+            try:
+                site_user_by = By.objects.get(problem__id=problem.id, evaluation_tag__id=ev['evaluation_tag'], site_user__id=request.user.id)
+                
+            except ObjectDoesNotExist:
+                
+                ev['my_by_status'] = 0
+                
+                continue
+            if site_user_by.good_flag == True:
+                
+                ev['my_by_status'] = 1
+                
+            else:
+                
+                ev['my-by-status'] = 2
+                
+            
+     
+        
         return render(request, 'problem/show.html', {'problem': problem, 'evaluations': evaluations})
     
     

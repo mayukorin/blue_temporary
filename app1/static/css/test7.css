@@ -15,6 +15,10 @@
     font-weight:bold;
 }
 
+.sub_index {
+    color:gray;
+}
+
 .maru {
     color:green;
 }
@@ -85,6 +89,7 @@ img {
 	padding:5px;
 }
 
+
 .tag1 {
 	background:lightpink;
 }
@@ -97,9 +102,18 @@ img {
 	background:skyblue;
 }
 
+.eval {
+    color:gray;
+}
+
 .answer_show:link { color:black; text-decoration:none }
 .answer_show:visited { color:black; text-decoration:none }
 .answer_show:hover { color:black; text-decoration:none }
 .answer_show:active { color:black; text-decoration:none }
+
+.evaluation_link:link { color:white; text-decoration:none }
+.evaluation_link:visited { color:white; text-decoration:none }
+.evaluation_link:hover { color:white; text-decoration:none }
+.evaluation_link:active { color:white; text-decoration:none }
 
 

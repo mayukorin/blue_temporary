@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<p><a href = "{% url 'app1:chapter_list' %}">章一覧</a> > <a href="{% url 'app1:section_list' by_comment.by.problem.problem_group.section.chapter.id %}">{{by_comment.by.problem.problem_group.section.chapter.subject.name}} 第{{by_comment.by.problem.problem_group.section.chapter.number}}章 {{ by_comment.by.problem.problem_group.section.chapter.name }}</a> > <a href="{% url 'app1:problem_group_list' by_comment.by.problem.problem_group.section.id %}"> §{{by_comment.by.problem.problem_group.section.number}} {{by_comment.by.problem.problem_group.section.name}}</a> > <a href="{% url 'app1:problem_list' by_comment.by.problem.problem_group.id %}">{{by_comment.by.problem.problem_group.name}}{{problem_group.name}}（{{by_comment.by.problem.problem_group.problems.all|length}}題）</a> > <a href="{% url 'app1:problem_show' by_comment.by.problem.id %}">{{by_comment.by.problem.name}}</a> > <a href="{% url 'app1:by_comment_list' by_comment.by.problem.id by_comment.by.evaluation_tag.id by_comment.by.evaluation_tag.content by_comment.by.evaluation_tag.evaluation_type.id %}">評価タグ「{{by_comment.by.evaluation_tag.content}}」</a></p>
+    <h2>{{by_comment.by.problem.name}}の評価タグ「{{by_comment.by.evaluation_tag.content}}」のコメント編集ページ</h2><br>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>範囲</td>
+                <td>{{by_comment.by.problem.problem_group.section.chapter.subject.name}} §{{by_comment.by.problem.problem_group.section.number}} {{by_comment.by.problem.problem_group.section.name}}</td>
+            </tr>
+            <tr>
+                <td>問題名</td>
+                <td>{{by_comment.by.problem.name}}</td>
+            </tr>
+            <tr>
+                <td>詳細</td>
+                <td>
+                    {% if by_comment.by.problem.problem_group.number > 0 %}
+                        {{by_comment.by.problem.problem_group.title}}
+                    {% else %}
+                        ー
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        <span class="evaluation tag{{by_comment.by.evaluation_tag.evaluation_type.id}}">
+                    {{by_comment.by.evaluation_tag.content}}
+        </span>&nbsp;
+        
+    </p>
+    <form method="post" action="{% url 'app1:by_comment_update' by_comment.id %}">
+            <div class="form-group">
+                <label>{{form.content.label}}</label>
+                <textarea name="content" class="form-control {% if form.content.errors %}is-invalid{% endif %}">{% if form.content.value != None %}{{form.content.value}}{% endif %}</textarea>
+                {% if form.content.errors %}
+                    <div class="invalid-feedback">{{form.content.errors.0}}</div>
+                {% endif %}
+            </div>
+        
+        <button class="btn btn-primary" type="submit">更新</button>
+   　
+       　{% csrf_token %}
+    </form>
+    
+{% endblock %}

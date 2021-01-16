@@ -143,3 +143,7 @@ IMAGE_ROOT = os.path.join(BASE_DIR, 'images')
 IMAGE_URL = '/images/'
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
+
+EVALUATION_TAG_AGREE = 1
+EVALUATION_TAG_DISAGREE = 2
+EVALUATION_TAG_NO_OPINION = 0

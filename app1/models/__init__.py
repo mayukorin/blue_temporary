@@ -19,3 +19,4 @@ from app1.models.photo import Photo
 from app1.models.type import Type
 from app1.models.evaluation_tag import EvaluationTag
 from app1.models.by import By
+from app1.models.by_comment import ByComment

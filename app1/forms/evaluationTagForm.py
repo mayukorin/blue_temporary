@@ -9,6 +9,7 @@ Created on Wed Jan 13 16:22:52 2021
 from django import forms
 from app1.models.evaluation_tag import EvaluationTag
 from app1.models.type import Type
+from app1.models.by import By
 from django.core.exceptions import ObjectDoesNotExist
 from app1.widgets import SuggestWidget
 from django.urls import reverse_lazy
@@ -27,7 +28,7 @@ class EvaluationTagRegisterForm(forms.ModelForm):
         
         widgets = {
             'content': SuggestWidget(attrs={'data-url': reverse_lazy('app1:evaluation_tag_suggest'), 'name': 'content'}),
-            #'content': forms.TextInput(),
+            
             'evaluation_type': forms.Select(attrs={'class': 'form-control'})
             }
         
@@ -38,15 +39,20 @@ class EvaluationTagRegisterForm(forms.ModelForm):
                                              empty_label=None,
                                              label='主に身につくこと',
                                              widget=forms.Select(attrs={'class': 'form-control'}))
+    comment = forms.CharField(label='コメント（任意）',
+                              required=False,
+                              widget=forms.Textarea(attrs={'class': 'form-control'}))
     
     
     
-    
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user_id, problem_id, *args, **kwargs):
         
         super().__init__(*args, **kwargs)
+        
+        self.user_id = user_id
+        self.problem_id = problem_id
+        self.evaluation_tag_cache = None
         a = SuggestWidget()
-        print(a.media)
         
         self.fields['content'].required = False
         
@@ -58,26 +64,42 @@ class EvaluationTagRegisterForm(forms.ModelForm):
     def clean_content(self):
         
         content = self.cleaned_data['content']
-        print("ooo")
-        print(content)
         if content is None:
             
             raise forms.ValidationError('評価タグの内容を入力してください')
             
         return content
     
-    def evaluation_tag_exist(self):
+    def clean(self):
         
-        content = self.cleaned_data['content']
-        evaluation_type_id = self.cleaned_data['evaluation_type'].id
+        content = self.cleaned_data.get('content')
+        evaluation_type = self.cleaned_data.get('evaluation_type')
         
         try:
-            evaluation_tag = EvaluationTag.objects.get(content=content, evaluation_type__id=evaluation_type_id )
+            evaluation_tag = EvaluationTag.objects.get(content=content, evaluation_type__id=evaluation_type.id)
             
         except ObjectDoesNotExist:
             
-            print('新しい評価タグ')
+            print('評価タグ自体がまだ存在しないか、フォームの入力を間違えている')
             
-            return None
+            return
         
-        return evaluation_tag
+        self.evaluation_tag_cache = evaluation_tag
+        
+        try:
+            by = By.objects.get(evaluation_tag__id=self.evaluation_tag_cache.id, site_user__id=self.user_id, problem__id=self.problem_id)
+            
+        except ObjectDoesNotExist:
+            
+            print('まだその評価タグをその問題に自分では登録していない')
+            
+            return
+        
+        raise forms.ValidationError('その問題に対するその評価タグは以前に登録しています')
+            
+    
+    def evaluation_tag_exist(self):
+        
+        
+        return self.evaluation_tag_cache
+        

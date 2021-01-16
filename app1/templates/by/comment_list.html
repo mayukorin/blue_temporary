@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<p><a href = "{% url 'app1:chapter_list' %}">章一覧</a> > <a href="{% url 'app1:section_list' problem.problem_group.section.chapter.id %}">{{problem.problem_group.section.chapter.subject.name}} 第{{problem.problem_group.section.chapter.number}}章 {{ problem.problem_group.section.chapter.name }}</a> > <a href="{% url 'app1:problem_group_list' problem.problem_group.section.id %}"> §{{problem.problem_group.section.number}} {{problem.problem_group.section.name}}</a> > <a href="{% url 'app1:problem_list' problem.problem_group.id %}">{{problem.problem_group.name}}{{problem_group.name}}（{{problem.problem_group.problems.all|length}}題）</a> > <a href="{% url 'app1:problem_show' problem.id %}">{{problem.name}}</a> > 評価タグ「{{evaluation_tag_content}}」</p>
+    <h2>{{problem.name}}の評価タグ「{{evaluation_tag_content}}」のコメントページ</h2><br>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>範囲</td>
+                <td>{{problem.problem_group.section.chapter.subject.name}} §{{problem.problem_group.section.number}} {{problem.problem_group.section.name}}</td>
+            </tr>
+            <tr>
+                <td>問題名</td>
+                <td>{{problem.name}}</td>
+            </tr>
+            <tr>
+                <td>詳細</td>
+                <td>
+                    {% if problem.problem_group.number > 0 %}
+                        {{problem.problem_group.title}}
+                    {% else %}
+                        ー
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        <span class="evaluation tag{{evaluation_tag_type}}">
+                    {{evaluation_tag_content}}
+        </span>&nbsp;
+        {% if my_by_status == 0 %}
+            <a href="{%url 'app1:by_register' problem.id evaluation_tag_id evaluation_tag_content evaluation_tag_type my_by_status 1 %}"><i class="far fa-thumbs-up eval"></i></a>{{good_byes_count}}件&nbsp;
+            <a href="{%url 'app1:by_register' problem.id evaluation_tag_id evaluation_tag_content evaluation_tag_type my_by_status 2 %}"><i class="far fa-thumbs-down eval"></i></a>{{bad_byes_count}}件
+        {% elif my_by_status == 1 %}
+            <i class="fas fa-thumbs-up eval"></i>{{good_byes_count}}件&nbsp;
+            <a href="{%url 'app1:by_register' problem.id evaluation_tag_id evaluation_tag_content evaluation_tag_type my_by_status 2 %}"><i class="far fa-thumbs-down eval"></i></a>{{bad_byes_count}}件&nbsp;
+            <a href="#" onclick="confirmDestroy();">評価タグの評価を外す</a>
+            <form method="post" action="{% url 'app1:evaluation_tag_release' problem.id evaluation_tag_id %}">
+                {% csrf_token %}
+            </form>
+        {% elif my_by_status == 2 %}
+            <a href="{%url 'app1:by_register' problem.id evaluation_tag_id evaluation_tag_content evaluation_tag_type my_by_status 1 %}"><i class="far fa-thumbs-up eval"></i></a>{{good_byes_count}}件&nbsp;
+            <i class="fas fa-thumbs-down eval"></i>{{bad_byes_count}}件&nbsp;
+            <a href="#" onclick="confirmDestroy();">評価タグの評価を外す</a>
+            <form method="post" action="{% url 'app1:evaluation_tag_release' problem.id evaluation_tag_id %}">
+                {% csrf_token %}
+            </form>
+        {% endif %}
+    </p>
+    <h3>コメント</h3>
+    {% if my_by_status == 1 or my_by_status == 2 %}
+        <a href="{% url 'app1:by_comment_register' problem.id evaluation_tag_id evaluation_tag_content evaluation_tag_type %}">コメントを投稿する</a>
+    {% endif %}<br><br>
+    {% if by_comments|length != 0 %}
+        {% for bc in by_comments %}
+            <hr>
+            <div>
+                <span class="username">
+                    {{bc.by.site_user.username}}&nbsp;
+                    {% if bc.by.good_flag == 1 %}
+                        <i class="far fa-thumbs-up"></i>
+                    {% else %}
+                        <i class="far fa-thumbs-down"></i>
+                    {% endif %}
+                </span>
+                &nbsp;&nbsp;{{bc.updated_at|date:"Y/m/d H:i"}}
+                {% if bc.updated_at != bc.created_at %} (編集済み）{% endif %}
+                {% if request.user.id == bc.by.site_user.id %}
+                    &nbsp;<a href="{% url 'app1:by_comment_update' bc.id %}">編集</a>&nbsp;
+                    <a href="#" onclick="confirmDestroy2({{bc.id}})">削除</a>
+                    <form method="post" action="{% url 'app1:by_comment_delete' bc.id %}" id="form{{bc.id}}" >{% csrf_token %}</form>
+                {% endif %}
+                <br>
+                {{bc.content|linebreaksbr}}
+            </div>
+        {% endfor %}
+    {% else %}
+        コメントはまだありません
+    {% endif %}
+    <script>
+        function confirmDestroy() {
+                        if(confirm("評価タグについてのコメントも削除されますが、よろしいですか？")) {
+                            document.forms[1].submit();
+                        }
+                    }
+                    
+       
+        function confirmDestroy2(id) {
+            if(confirm("コメントを削除して、よろしいですか？")) {
+                id = 'form'+id;
+                form = document.getElementById(id);
+                form.submit();
+            }
+        }
+        
+    </script>
+{% endblock %}
