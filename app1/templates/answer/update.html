@@ -27,8 +27,119 @@
                 {% endif %}
             </div>
         {% endfor %}
+        <p>原因タグ</p>
+            {{withes_formset.management_form}}
+        <div>
+            {% if withes_formset|length == 0 %}
+                原因タグはまだありません
+            {% else %}
+                
+                {% for with_form in withes_formset %}
+                    
+                    <div>
+                        {% with with=withes.pop %}
+                            <div class="form-group">
+                                <input type="text" value="{{with.cause_tag.content}}" class="form-control" readonly>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" value="{{with.cause_tag.cause_type.name}}" class="form-control" readonly>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="id_form-{{forloop.counter0}}-overcome_flag" name="form-{{forloop.counter0}}-overcome_flag">
+                                <label class="form-check-label" for="check1a">克服</label>
+                            </div>
+                            
+                        <hr>
+                        
+                        {% endwith %}
+                        
+                    </div>
+                   
+                {% endfor %}
+            {% endif %}
+        </div>
+        <hr>
+        <p>新規原因タグ</p>
+        <div>
+            {{formset.management_form}}
+            <span id="new"></span>
+        </div>
+        <div id="cause_tag_area">
+            {% for cause_tag in formset %}
+                <div id="cause_tag_form-{{forloop.counter0}}">
+                    {{cause_tag.as_p}}
+                  
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    
+         <div class="text-right">
+                            <button class="btn btn-primary add" id="add" type="button">原因タグの追加</button>
+                            <button class="btn btn-primary add" id="del" type="button">削除</button>
+        </div>
+        
         <button class="btn btn-primary" type="submit">登録</button>
        　
        　{% csrf_token %}
     </form>
+    <script>
+        $(document).on('change', ':file', function() {
+            var input = $(this);
+            file_name = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            label = document.getElementById('filename')
+            label.innerHTML = file_name
+            var input = $('#custom-file-1')
+            
+            
+        });
+   
+    
+    $(function() {
+        var totalCauseTagElement = $('#new').parent().find('input#id_form-TOTAL_FORMS');
+        var currentCauseTagCount = parseInt(totalCauseTagElement.val());
+        console.log(currentCauseTagCount);
+        
+        $('button#add').on('click', function() {
+        
+      
+            var latestIndex = currentCauseTagCount - 1;
+            console.log(latestIndex)
+            var latestCauseTagInput = $(`#cause_tag_form-${latestIndex}`)
+            var causeTagInput = latestCauseTagInput.clone(true)
+            causeTagInput.prop('id', `cause_tag_form-${currentCauseTagCount}`)
+            $('div#cause_tag_area').append(causeTagInput);
+            
+            $(`div#cause_tag_form-${currentCauseTagCount}`).find(`#id_form-${latestIndex}-content`).val('');
+            $(`div#cause_tag_form-${currentCauseTagCount}`).find(`#id_form-${latestIndex}-content`).attr({
+                                                                                                        'id': `id_form-${currentCauseTagCount}-content`,
+                                                                                                        'name': `form-${currentCauseTagCount}-content`
+                                                                                                
+                                                                                                        });
+                                                                                                        
+                                                                         
+            $(`div#cause_tag_form-${currentCauseTagCount}`).find(`#id_form-${latestIndex}-cause_type`).attr({
+                                                                                                        'id': `id_form-${currentCauseTagCount}-cause_type`,
+                                                                                                        'name': `form-${currentCauseTagCount}-cause_type`
+                                                                                                        });                               
+                                                                                                        
+            currentCauseTagCount += 1;
+            totalCauseTagElement.attr('value', currentCauseTagCount);
+          
+            
+        });
+        
+         $('button#del').on('click', function() {
+         
+             if (currentCauseTagCount != 1) {
+                 var latestIndex = currentCauseTagCount - 1;
+                 $(`#cause_tag_form-${latestIndex}`).remove();
+                 currentCauseTagCount -= 1;
+                 totalCauseTagElement.attr('value', currentCauseTagCount);
+            }
+         
+         });
+    
+    });
+     </script>
 {% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<p><a href="{% url 'app1:cause_tag_list' problems_with_cause_tag.0.problem__problem_group__section__id %}">「§{{problems_with_cause_tag.0.problem__problem_group__section__number}} {{problems_with_cause_tag.0.problem__problem_group__section__name}}」の原因タグ一覧</a> > 原因タグ「{{problems_with_cause_tag.0.cause_tag__content}}」</p>
+<h2>原因タグ「{{problems_with_cause_tag.0.cause_tag__content}}」がついている問題一覧</h2>
+<table class="table table-striped">
+    <tbody>
+        {% for problem in problems_with_cause_tag %}
+            <tr>
+                <td>{{problem.problem__problem_group__section__chapter__subject__name}}
+                <td>§{{problem.problem__problem_group__section__number}}</td>
+                <td>{{problem.problem__name }}</td>
+                <td><a href="{% url 'app1:problem_show' problem.problem__id %}">問題詳細を見る</a></td>
+                <td><a href="{% url 'app1:answer_list_with_cause_tag' problem.problem__id problem.cause_tag__id %}">{{problem.not_overcome_answer_count}}件の間違い</a></td>
+            </tr> 
+            
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

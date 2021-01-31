@@ -33,6 +33,16 @@
                             <a class="nav-link" href="{% url 'app1:problem_search' %}">問題検索 <span class="sr-only">(current)</span></a>
                         {% endif %}    
                     </li>
+                    <li class="nav-item active">
+                      {% if user.is_authenticated %}
+                          <a class="nav-link" href="{% url 'app1:cause_tag_list' 0 %}">未克服原因タグ <span class="sr-only">(current)</span></a>
+                      {% endif %}    
+                  </li>
+                  <li class="nav-item active">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'app1:cause_tag_graph'%}">未克服原因タググラフ <span class="sr-only">(current)</span></a>
+                    {% endif %}    
+                </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
                   </li>

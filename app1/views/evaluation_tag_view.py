@@ -21,6 +21,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.http import JsonResponse
 from django.utils import timezone
+from app1.forms.evaluationTagForm import EvaluationTagSearchForm
+from django.db.models import Count
 
 
 class EvaluationTagRegisterView(LoginRequiredMixin, View):
@@ -117,4 +119,40 @@ class EvaluationTagReleaseView(LoginRequiredMixin, View):
         
 
 evaluation_tag_release_view = EvaluationTagReleaseView.as_view()
+
+class EvaluatinoTagSearchView(LoginRequiredMixin, View):
+    
+    def get(self, request, *args, **kwargs):
+        
+        form = EvaluationTagSearchForm()
+        
+        return render(request, 'evaluation_tag/search.html', {'form': form})
+    
+    def post(self, request, *args, **kwargs):
+        
+        form = EvaluationTagSearchForm(request.POST)
+        
+        if not form.is_valid():
+            
+            return render(request, 'evaluation_tag/search.html', {'form': form})
+        
+        if form.cleaned_data['content_keyword'] != '':
+            problems_for_evaluation_keyword = By.objects.select_related().filter(good_flag=1).filter(evaluation_tag__content__icontains=form.cleaned_data['content_keyword']).values('evaluation_tag', 'problem', 'problem__name', 'evaluation_tag__evaluation_type__id', 'evaluation_tag__content').annotate(total=Count('evaluation_tag'))
+        else:
+            problems_for_evaluation_keyword = By.objects.select_related().filter(good_flag=1).values('evaluation_tag', 'problem', 'problem__name', 'evaluation_tag__evaluation_type__id', 'evaluation_tag__content').annotate(total=Count('evaluation_tag'))
+        
+        for pfek in problems_for_evaluation_keyword:
+            
+            pfek['bad_flag_count'] = By.objects.filter(good_flag=0).filter(evaluation_tag__id=pfek['evaluation_tag']).filter(problem__id=pfek['problem']).count()
+            
+        context = {
+            'problems_for_evaluation_keyword': problems_for_evaluation_keyword,
+            'keyword': form.cleaned_data['content_keyword'],
+            }
+        return render(request, 'evaluation_tag/result.html', context)
+    
+    
+evaluation_tag_search_view = EvaluatinoTagSearchView.as_view()
+        
+        
         

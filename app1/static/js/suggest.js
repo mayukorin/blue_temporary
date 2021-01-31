@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', e => {
             const keyword = element.value;
             
             const url = `${element.dataset.url}?keyword=${keyword}`;
-           
+            console.log(url)
             
             if (keyword) {
                 

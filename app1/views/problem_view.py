@@ -2,6 +2,9 @@ from django.views import View
 from app1.models.problem_group import Problem_group
 from app1.models.problem import Problem
 from app1.models.subject import Subject
+from app1.models.cause_tag import CauseTag
+from app1.models.with_model import With
+from app1.models.latest_with import LatestWith
 from app1.models.by import By
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -129,11 +132,25 @@ class ProblemShowView(LoginRequiredMixin, View):
             else:
                 
                 ev['my-by-status'] = 2
-                
-            
      
         
         return render(request, 'problem/show.html', {'problem': problem, 'evaluations': evaluations})
     
     
 problem_show_view = ProblemShowView.as_view()
+
+class ProblemListWithCauseTag(LoginRequiredMixin, View):
+
+    def get(self, request, cause_tag_id, section_id, *args, **kwargs):
+
+        problems_with_cause_tag = LatestWith.objects.select_related('problem', 'cause_tag').filter(site_user__id=request.user.reference_user.id).filter(cause_tag__id=cause_tag_id).values('cause_tag__content','cause_tag__id', 'problem__id', 'problem__name', 'problem__problem_group__section__number', 'problem__problem_group__section__id', 'problem__problem_group__section__name', 'problem__problem_group__section__chapter__subject__name').annotate(total=Count('problem__id'))
+        print(problems_with_cause_tag)
+        latest_withes = With.objects.select_related('latest_with').filter(latest_with__cause_tag__id=cause_tag_id).filter(overcome_flag=False).filter(latest_with__latest_with__overcome_flag=False).values('latest_with__id', 'latest_with__cause_tag__id', 'latest_with__cause_tag__content', 'latest_with__problem', 'latest_with__problem__name', 'latest_with__problem__problem_group__section__number', 'latest_with__problem__problem_group__section__chapter__subject__name').annotate(total=Count('latest_with__id'))
+        
+        for problem in problems_with_cause_tag:
+            print(problem['problem__id'])
+            problem['not_overcome_answer_count'] = With.objects.select_related('answer', 'cause_tag').filter(answer__student__id=request.user.reference_user.id).filter(answer__problem__id=problem['problem__id']).filter(cause_tag__id=cause_tag_id).filter(overcome_flag=False).count()
+        print(problems_with_cause_tag)
+        return render(request, 'problem/problem_list_with_cause_tag.html', {'problems_with_cause_tag': problems_with_cause_tag, 'latest_withes' : latest_withes})
+
+problem_list_with_cause_tag_view = ProblemListWithCauseTag.as_view()

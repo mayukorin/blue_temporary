@@ -14,6 +14,9 @@ from app1.models.correct_situation import CorrectSituation
 from app1.models.type import Type
 from app1.models.evaluation_tag import EvaluationTag
 from app1.models.by import By
+from app1.models.cause_tag import CauseTag
+from app1.models.with_model import With
+from app1.models.latest_with import LatestWith
 # Register your models here.
 
 
@@ -37,4 +40,7 @@ admin.site.register(CorrectSituation)
 admin.site.register(Type)
 admin.site.register(EvaluationTag)
 admin.site.register(By)
+admin.site.register(CauseTag)
+admin.site.register(With)
+admin.site.register(LatestWith)
 # Register your models here.

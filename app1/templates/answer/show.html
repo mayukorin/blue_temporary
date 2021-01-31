@@ -49,6 +49,24 @@
         </tbody>
     </table>
     <p><a href="{% url 'app1:answer_update' answer.id %}">勉強記録を編集する</a></p><br>
+    <h3>原因タグ</h3><br>
+        {% if answer.withes.all|length == 0 %}
+            <div>
+                原因タグはまだありません
+            </div>
+        {% else %}
+            {% for with in answer.withes.all %}
+                <div>
+                    <div>
+                        <div class="cause tag{{with.cause_tag.cause_type.id}} {% if with.overcome_flag == 1 %} overcome{{with.cause_tag.cause_type.id}} {% endif %}">
+                            <a class="cause_tag_link" href="{% url 'app1:answer_list_with_cause_tag' with.answer.problem.id with.cause_tag.id %}">{{with.cause_tag.content}}</a>
+                        </div>
+                    </div>
+                    <div class="cause_tag_user">{{with.site_user.username}}</div>
+                </div><br>
+            {% endfor %}
+        {% endif %}
+        <br>
     <h3>解答写真</h3><br>
     <div class="content">
         <div><a href="{% url 'app1:photo_register' answer.id %}">解答写真を新規登録する</a></div><br>

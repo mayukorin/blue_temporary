@@ -8,7 +8,7 @@ Created on Sun Jan  3 21:28:25 2021
 
 from django import forms
 from app1.models.answer import Answer
-
+from app1.models.correct_situation import CorrectSituation
 
 class AnswerRegisterForm(forms.ModelForm):
     
@@ -42,6 +42,12 @@ class AnswerRegisterForm(forms.ModelForm):
         label='コメント', 
         widget=forms.Textarea()
         )
+    
+    correct_situation = forms.ModelChoiceField(queryset=CorrectSituation.objects.all().order_by('id'),
+                                               empty_label=None,
+                                               label='解答状況',
+                                               widget=forms.Select(attrs={'class':'form-control'},)
+                                               )
     
     def clean_solve_plan_date(self):
         
@@ -91,6 +97,11 @@ class AnswerUpdateForm(forms.ModelForm):
             'solve_plan_date': '解答予定日',
             'correct_situation': '解答状況'
             }
+    correct_situation = forms.ModelChoiceField(queryset=CorrectSituation.objects.all().order_by('id'),
+                                               empty_label=None,
+                                               label='解答状況',
+                                               widget=forms.Select(attrs={'class':'form-control'},)
+                                               )
     
     def clean_solve_plan_date(self):
         

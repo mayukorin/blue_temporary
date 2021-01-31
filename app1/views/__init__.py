@@ -15,4 +15,5 @@ from app1.views.photo_view import PhotoRegisterView
 from app1.views.evaluation_tag_view import EvaluationTagRegisterView
 from app1.views.by_view import ByRegisterView
 from app1.views.by_comment_view import ByCommentUpdateView
+from app1.views.cause_tag_view import NotOvercomeCauseTagList
 

@@ -102,4 +102,13 @@ class EvaluationTagRegisterForm(forms.ModelForm):
         
         
         return self.evaluation_tag_cache
+    
+    
+class EvaluationTagSearchForm(forms.Form):
+    
+    content_keyword = forms.CharField(
+        label="評価タグ名",
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        required=False,)
+    
         
